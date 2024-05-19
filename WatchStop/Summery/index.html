@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Menlo, monospace;
+            color: #bbb;
+            text-align: center;
+        }
+
+        .stopwatch {
+            margin-top: 5vh;
+            font-size: 20vw;
+            height: 25vw;
+        }
+        .progress {
+            margin-top: 5vh;
+        }
+
+        .btn-group{
+            margin-top: 5vh;    
+        }
+    </style>
+</head>
+
+<body>
+    <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
+        <a href="#" class="btn btn-primary" onClick="stopwatch.start();">Start</a>
+        <a href="#" class="btn btn-secondary" onClick="stopwatch.stop();">Stop</a>
+        <a href="#" class="btn btn-secondary" onClick="stopwatch.restart();">Restart</a>
+        <a href="#" class="btn btn-info" onClick="stopwatch.lap();">Lap</a>
+        <a href="#" class="btn btn-info" onClick="stopwatch.clear();">Clear Laps</a>
+    </div>
+    <div class="stopwatch"></div>
+    <audio id="audio" src="pyk.mp3"></audio>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0"
+            aria-valuemin="0" aria-valuemax="60"></div>
+    </div>
+    <ul class="results"></ul>
+    <div id="badgeContainer"></div>
+    <script>
+
+        let progressBar = document.querySelector('.progress-bar');
+        let progress = 0;
+        class Stopwatch {
+            constructor(display, results) {
+                this.running = false;
+                this.display = display;
+                this.reset();
+                this.print(this.times);
+            }
+
+            reset() {
+                this.times = [0, 0, 0];
+                progress = 0;
+            }
+
+            start() {
+                if (!this.time) this.time = performance.now();
+                if (!this.running) {
+                    this.running = true;
+                    requestAnimationFrame(this.step.bind(this));
+                }
+            }
+
+            lap() {
+                let times = this.times;
+                const badge = document.createElement('span');
+                badge.classList.add('badge', 'bg-primary', 'm-1', 'fs-3');
+                badge.textContent = this.format(times);
+                badgeContainer.appendChild(badge);
+
+            }
+
+            stop() {
+                this.running = false;
+                this.time = null;
+            }
+
+            restart() {
+                if (!this.time) this.time = performance.now();
+                if (!this.running) {
+                    this.running = true;
+                    requestAnimationFrame(this.step.bind(this));
+                }
+                this.reset();
+            }
+
+            clear() {
+                badgeContainer.innerHTML = '';
+            }
+
+            step(timestamp) {
+                if (!this.running) return;
+                this.calculate(timestamp);
+                this.time = timestamp;
+                this.print();
+                requestAnimationFrame(this.step.bind(this));
+            }
+
+            calculate(timestamp) {
+                var diff = timestamp - this.time;
+                // Hundredths of a second are 100 ms
+                this.times[2] += diff / 10;
+                // Seconds are 100 hundredths of a second
+                if (this.times[2] >= 100) {
+                    this.times[1] += 1;
+                    this.times[2] -= 100;
+
+                    progress += 1;
+                    progressBar.style.width = `${progress}%`;
+                    progressBar.setAttribute('aria-valuenow', progress);
+                }
+                // Minutes are 60 seconds
+                if (this.times[1] >= 60) {
+                    this.times[0] += 1;
+                    this.times[1] -= 60;
+                }
+
+                if (this.times[1] % 10 === 0) {
+                    this.playSound(); 
+                }
+            }
+            playSound(){
+                audio.play();
+            }
+            print() {
+                this.display.innerText = this.format(this.times);
+            }
+
+            format(times) {
+                return `${pad0(times[0], 2)}:${pad0(times[1], 2)}:${pad0(Math.floor(times[2]), 2)}`;
+            }
+        }
+
+        function pad0(value, count) {
+            var result = value.toString();
+            for (; result.length < count; --count)
+                result = '0' + result;
+            return result;
+        }
+
+        let stopwatch = new Stopwatch(
+            document.querySelector('.stopwatch'));
+
+
+    </script>
+</body>
+
+</html>
