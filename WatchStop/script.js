@@ -1,4 +1,4 @@
-// Progressbar
+// Progressbar 
 		let progressBar = document.querySelector('.progress-bar');
 		let progress = 0;
 		let progressBarid = setInterval(0, 60);
