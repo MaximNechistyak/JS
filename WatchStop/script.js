@@ -27,15 +27,10 @@
 
             lap() {
                 let times = this.times;
-                let li = document.createElement('li');
-                li.innerText = this.format(times);
-                this.results.appendChild(li);
-
-                const iconList = document.getElementById('iconList');
-                const li2 = document.createElement('li');
-                li2.classList.add('list-inline-item'); // Добавляем класс Bootstrap для горизонтального списка
-                li2.textContent = icon;
-                iconList.appendChild(li2);
+                const badge = document.createElement('span');
+                badge.classList.add('badge', 'bg-primary', 'm-1');
+                badge.textContent = this.format(times);
+                badgeContainer.appendChild(badge);
 
             }
 
@@ -54,7 +49,7 @@
             }
 
             clear() {
-                clearChildren(this.results);
+                badgeContainer.innerHTML = '';
             }
 
             step(timestamp) {
@@ -101,11 +96,6 @@
             for (; result.length < count; --count)
                 result = '0' + result;
             return result;
-        }
-
-        function clearChildren(node) {
-            while (node.lastChild)
-                node.removeChild(node.lastChild);
         }
 
         let stopwatch = new Stopwatch(
