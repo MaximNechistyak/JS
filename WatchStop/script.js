@@ -30,6 +30,13 @@
                 let li = document.createElement('li');
                 li.innerText = this.format(times);
                 this.results.appendChild(li);
+
+                const iconList = document.getElementById('iconList');
+                const li2 = document.createElement('li');
+                li2.classList.add('list-inline-item'); // Добавляем класс Bootstrap для горизонтального списка
+                li2.textContent = icon;
+                iconList.appendChild(li2);
+
             }
 
             stop() {
