@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
+        <a href="#" class="btn btn-primary" onClick="stopwatch.start();">Start</a>
+        <a href="#" class="btn btn-secondary" onClick="stopwatch.stop();">Stop</a>
+        <a href="#" class="btn btn-secondary" onClick="stopwatch.restart();">Restart</a>
+        <a href="#" class="btn btn-info" onClick="stopwatch.lap();">Lap</a>
+        <a href="#" class="btn btn-info" onClick="stopwatch.clear();">Clear Laps</a>
+    </div>
+    <div class="stopwatch"></div>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="60"></div>
+    </div>
+    <ul class="results"></ul>
+    <script src="script.js"></script>
+</body>
+</html>
